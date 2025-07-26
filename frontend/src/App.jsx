@@ -9,6 +9,7 @@ import DashboardPage from './pages/DashboardPage'
 import ProjectPage from './pages/ProjectPage'
 import EditorPage from './pages/EditorPage'
 import ExportPage from './pages/ExportPage'
+import MockDndTest from './pages/MockDndTest'
 
 // Import components
 import Layout from './components/Layout'
@@ -22,6 +23,8 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Routes>
+        {/* E2E test route for Playwright */}
+        <Route path="/mock-dnd-test" element={<MockDndTest />} />
         {/* Public routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
