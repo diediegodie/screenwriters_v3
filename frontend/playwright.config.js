@@ -10,7 +10,7 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     timeout: 120 * 1000,
   },
-  testDir: './src/components/__tests__',
+  testDir: './tests/e2e',
   use: {
     headless: true,
   },

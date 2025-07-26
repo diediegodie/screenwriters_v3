@@ -1,10 +1,9 @@
-// Sidebar.test.jsx
+// Sidebar.test.js
 // Tests for Sidebar component: normal, edge, and failure cases
-
 import React from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
-import Sidebar from './Sidebar';
+import Sidebar from '../../src/components/Sidebar.jsx';
 
 describe('Sidebar', () => {
   it('renders navigation links and project list (normal case)', () => {

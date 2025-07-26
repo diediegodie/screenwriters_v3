@@ -13,7 +13,8 @@
     "format": "prettier --write .",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:all": "node ../scripts/run-all-tests.js"
   },
   "dependencies": {
     "axios": "^1.6.2",
@@ -29,6 +30,9 @@
     "slate-history": "^0.93.0",
     "slate-react": "^0.102.0",
     "zustand": "^4.4.7"
+  },
+  "jest": {
+    "extensionsToTreatAsEsm": [".jsx"]
   },
   "devDependencies": {
     "@babel/core": "^7.28.0",
