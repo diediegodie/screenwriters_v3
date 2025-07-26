@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: writer-assistant-db
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: writer_admin
+      MONGO_INITDB_ROOT_PASSWORD: writer_password
+      MONGO_INITDB_DATABASE: writer_assistant
+    volumes:
+      - mongodb_data:/data/db
+      - ./backend/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - writer-network
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: writer-assistant-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URL=mongodb://writer_admin:writer_password@mongodb:27017/writer_assistant?authSource=admin
+      - DATABASE_NAME=writer_assistant
+      - DEBUG=True
+      - SECRET_KEY=development-secret-key-change-in-production
+    depends_on:
+      - mongodb
+    volumes:
+      - ./backend:/app
+      - /app/__pycache__
+    networks:
+      - writer-network
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: writer-assistant-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - writer-network
+    command: npm run dev
+
+volumes:
+  mongodb_data:
+
+networks:
+  writer-network:
+    driver: bridge
